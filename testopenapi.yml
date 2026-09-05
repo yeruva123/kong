@@ -1,0 +1,43 @@
+openapi: 3.0.3
+info:
+  title: Sample Petstore API
+  description: A simple sample API for Kong Deck onboarding
+  version: 1.0.0
+servers:
+  - url: https://httpbin.org
+    description: Upstream service
+paths:
+  /uuid:
+    get:
+      operationId: getUuid
+      summary: Get a random UUID
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uuid:
+                    type: string
+  /get:
+    get:
+      operationId: getRequestInfo
+      summary: Return request information
+      responses:
+        "200":
+          description: Successful response
+  /post:
+    post:
+      operationId: postData
+      summary: Echo posted data
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: Successful response
