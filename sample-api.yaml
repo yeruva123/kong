@@ -1,24 +1,78 @@
 openapi: 3.0.3
 info:
-  title: Sample Petstore API
-  description: A simple sample API for Kong Deck onboarding
+  title: Sample Pet API
+  description: A very simple API with one resource
   version: 1.0.0
+
 servers:
   - url: https://httpbin.org
-    description: Upstream service
+    description: Sample upstream
+
 paths:
-  /uuid:
+  /pets:
     get:
-      operationId: getUuid
-      summary: Get a random UUID
+      operationId: listPets
+      summary: List all pets
       responses:
         "200":
-          description: Successful response
+          description: A list of pets
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  uuid:
-                    type: string
- 
+                type: array
+                items:
+                  $ref: "#/components/schemas/Pet"
+
+    post:
+      operationId: createPet
+      summary: Create a new pet
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Pet"
+      responses:
+        "201":
+          description: Pet created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pet"
+
+  /pets/{id}:
+    get:
+      operationId: getPet
+      summary: Get a pet by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: A single pet
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pet"
+        "404":
+          description: Pet not found
+
+components:
+  schemas:
+    Pet:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: string
+          example: "1"
+        name:
+          type: string
+          example: "Fluffy"
+        tag:
+          type: string
+          example: "dog"
