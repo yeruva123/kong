@@ -2,14 +2,6 @@ name: Kong API Onboarding with Deck
 
 on:
   push:
-    branches: [main]
-    paths:
-      - "openapi/**"
-      - ".github/workflows/api-onboarding.yml"
-  pull_request:
-    branches: [main]
-    paths:
-      - "openapi/**"
   workflow_dispatch:   # allow manual trigger
 
 env:
@@ -70,7 +62,7 @@ jobs:
         if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
         env:
           DECK_KONG_ADDR: ${{ secrets.KONG_ADMIN_URL }}
-          DECK_HEADERS: "kong-admin-token:${{ secrets.KONG_ADMIN_TOKEN }}"
+          DECK_HEADERS: "kong-admin-token:${{ secrets.KONG_API_TOKEN }}"
         run: |
           echo "Syncing configuration to Kong..."
           deck gateway sync \
