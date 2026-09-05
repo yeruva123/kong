@@ -6,7 +6,7 @@ on:
 
 env:
   # Adjust these to match your environment
-  OPENAPI_SPEC: openapi/sample-api.yaml
+  OPENAPI_SPEC: sample-api.yaml
   KONG_STATE_FILE: kong/generated-kong.yaml
   SELECT_TAG: sample-api          # useful for partial syncs
 
