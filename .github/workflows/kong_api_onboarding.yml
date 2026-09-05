@@ -49,7 +49,7 @@ jobs:
         if: github.event_name == 'pull_request'
         env:
           DECK_KONG_ADDR: ${{ secrets.KONG_ADMIN_URL }}
-          DECK_HEADERS: "kong-admin-token:${{ secrets.KONG_ADMIN_TOKEN }}"
+          DECK_HEADERS: "Authorization: Bearer ${{ secrets.KONG_ADMIN_TOKEN }}"
         run: |
           deck gateway diff \
             --kong-addr "${{ env.DECK_KONG_ADDR }}" \
