@@ -67,7 +67,7 @@ jobs:
         run: |
           echo "Syncing configuration to Kong..."
           
-          deck gateway sync sample-api.yaml \
+          deck gateway sync "${{ env.KONG_STATE_FILE }}" \
             --konnect-token  "${{ secrets.KONG_ADMIN_TOKEN }}" \
             --konnect-control-plane-name "${{ env.DECK_KONG_ADDR }}"
 
