@@ -36,6 +36,7 @@ jobs:
             --output-file "${{ env.KONG_STATE_FILE }}" \
             --select-tag "${{ env.SELECT_TAG }}"
           echo "=== Generated Kong config ==="
+          
           cat "${{ env.KONG_STATE_FILE }}"
 
       - name: Validate generated Kong configuration
