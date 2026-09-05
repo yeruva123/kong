@@ -1,0 +1,86 @@
+name: Kong API Onboarding with Deck
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "openapi/**"
+      - ".github/workflows/api-onboarding.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "openapi/**"
+  workflow_dispatch:   # allow manual trigger
+
+env:
+  # Adjust these to match your environment
+  OPENAPI_SPEC: openapi/sample-api.yaml
+  KONG_STATE_FILE: kong/generated-kong.yaml
+  SELECT_TAG: sample-api          # useful for partial syncs
+
+jobs:
+  onboard-api:
+    runs-on: ubuntu-latest
+    name: Convert OpenAPI → Kong config & Sync
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup decK
+        uses: kong/setup-deck@v1
+        # Optionally pin a version:
+        # with:
+        #   deck-version: 1.40.0
+
+      - name: Show decK version
+        run: deck version
+
+      - name: Convert OpenAPI → Kong declarative config
+        run: |
+          mkdir -p kong
+          deck file openapi2kong \
+            --spec "${{ env.OPENAPI_SPEC }}" \
+            --output-file "${{ env.KONG_STATE_FILE }}" \
+            --select-tag "${{ env.SELECT_TAG }}"
+          echo "=== Generated Kong config ==="
+          cat "${{ env.KONG_STATE_FILE }}"
+
+      - name: Validate generated Kong configuration
+        run: |
+          deck file validate "${{ env.KONG_STATE_FILE }}"
+          # Optional: lint with custom rules if you have them
+          # deck file lint "${{ env.KONG_STATE_FILE }}"
+
+      # ---------- Diff on Pull Requests (safe) ----------
+      - name: Diff against running Kong (PR only)
+        if: github.event_name == 'pull_request'
+        env:
+          DECK_KONG_ADDR: ${{ secrets.KONG_ADMIN_URL }}
+          DECK_HEADERS: "kong-admin-token:${{ secrets.KONG_ADMIN_TOKEN }}"
+        run: |
+          deck gateway diff \
+            --kong-addr "${{ env.DECK_KONG_ADDR }}" \
+            --headers "${{ env.DECK_HEADERS }}" \
+            --select-tag "${{ env.SELECT_TAG }}" \
+            "${{ env.KONG_STATE_FILE }}" || true
+
+      # ---------- Sync only on main (or manual) ----------
+      - name: Sync configuration to Kong
+        if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+        env:
+          DECK_KONG_ADDR: ${{ secrets.KONG_ADMIN_URL }}
+          DECK_HEADERS: "kong-admin-token:${{ secrets.KONG_ADMIN_TOKEN }}"
+        run: |
+          echo "Syncing configuration to Kong..."
+          deck gateway sync \
+            --kong-addr "${{ env.DECK_KONG_ADDR }}" \
+            --headers "${{ env.DECK_HEADERS }}" \
+            --select-tag "${{ env.SELECT_TAG }}" \
+            "${{ env.KONG_STATE_FILE }}"
+
+      - name: Upload generated Kong config as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: kong-config
+          path: ${{ env.KONG_STATE_FILE }}
