@@ -90,8 +90,9 @@ jobs:
           echo "Pinging Kong..."
           
           deck gateway ping \
-          --konnect-token "kpat_4uVdljok8Vkf3awjPJ0Zi3IkFesO6pwUn3yUfEXO7NbAIv4Jo" \
-          --konnect-addr "https://us.api.konghq.com"
+            --konnect-token "kpat_4uVdljok8Vkf3awjPJ0Zi3IkFesO6pwUn3yUfEXO7NbAIv4Jo" \
+            --konnect-addr "https://us.api.konghq.com"
+            --verbose 3 || true
           
           echo "Syncing configuration to Kong..."
           
