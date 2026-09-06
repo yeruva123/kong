@@ -67,10 +67,11 @@ jobs:
         run: |
           echo "Syncing configuration to Kong..."
           
-          deck gateway sync kong/generated-kong.yaml \
+          deck gateway sync "${{ env.KONG_STATE_FILE }}" \
           --konnect-token "${{ secrets.KONG_ADMIN_TOKEN }}" \
-          --konnect-control-plane-id "c3cb3787-4cd8-44ec-a67a-f172e5fde845" \
-          --konnect-addr https://us.api.konghq.com
+          --konnect-control-plane-name "serverless-api-gateway-demo" \
+          --konnect-addr "https://us.api.konghq.com" \
+          --select-tag "${{ env.SELECT_TAG }}"
 
       - name: Upload generated Kong config as artifact
         uses: actions/upload-artifact@v4
