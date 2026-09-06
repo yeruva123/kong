@@ -45,19 +45,6 @@ jobs:
           # Optional: lint with custom rules if you have them
           # deck file lint "${{ env.KONG_STATE_FILE }}"
 
-      # ---------- Diff on Pull Requests (safe) ----------
-      - name: Diff against running Kong (PR only)
-        if: github.event_name == 'pull_request'
-        env:
-          DECK_KONG_ADDR: ${{ secrets.KONG_ADMIN_URL }}
-          DECK_HEADERS: "Authorization: Bearer ${{ secrets.KONG_ADMIN_TOKEN }}"
-        run: |
-          deck gateway diff \
-            --kong-addr "${{ env.DECK_KONG_ADDR }}" \
-            --headers "${{ env.DECK_HEADERS }}" \
-            --select-tag "${{ env.SELECT_TAG }}" \
-            "${{ env.KONG_STATE_FILE }}" || true
-
       - name: Deep debug
         run: |
           echo "=== Deck version ==="
@@ -82,15 +69,11 @@ jobs:
 
 
       # ---------- Sync only on main (or manual) ----------
-      - name: Sync configuration to Kong
-        if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
-        env:
-          DECK_KONG_ADDR: ${{ secrets.KONG_ADMIN_URL }}
-          DECK_HEADERS: "kong-admin-token:${{ secrets.KONG_ADMIN_TOKEN }}"
+      - name: Sync configuration to Kong       
         run: |
-        
           echo "Pinging Kong..."
           echo "=== Second Testing deck ping with verbose ==="
+          
           deck gateway ping \
             --konnect-token "kpat_4uVdljok8Vkf3awjPJ0Zi3IkFesO6pwUn3yUfEXO7NbAIv4Jo" \
             --konnect-addr "https://us.api.konghq.com" \
