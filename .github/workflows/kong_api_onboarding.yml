@@ -63,7 +63,7 @@ jobs:
           echo "=== Deck version ==="
           deck version
       
-          echo ""
+          echo "Run curl command"
           echo "=== Testing with curl (same token) ==="
           curl -s -o /tmp/curl_out.txt -w "HTTP Status: %{http_code}\n" \
             -H "Authorization: Bearer kpat_4uVdljok8Vkf3awjPJ0Zi3IkFesO6pwUn3yUfEXO7NbAIv4Jo" \
