@@ -79,6 +79,11 @@ jobs:
             --konnect-addr "https://us.api.konghq.com" \
             --verbose 3 || true
 
+          deck gateway ping \
+            --konnect-token "kpat_4uVdljok8Vkf3awjPJ0Zi3IkFesO6pwUn3yUfEXO7NbAIv4Jo" \
+            --konnect-addr "https://us.api.konghq.com" \
+            --verbose 3 || true
+
       # ---------- Sync only on main (or manual) ----------
       - name: Sync configuration to Kong
         if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
