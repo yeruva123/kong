@@ -77,22 +77,25 @@ jobs:
           deck gateway ping \
             --konnect-token "kpat_4uVdljok8Vkf3awjPJ0Zi3IkFesO6pwUn3yUfEXO7NbAIv4Jo" \
             --konnect-addr "https://us.api.konghq.com" \
-            --verbose 3 || true
-            
-          echo "=== Third Testing deck ping with verbose ==="
-          deck gateway ping \
-            --konnect-token "kpat_4uVdljok8Vkf3awjPJ0Zi3IkFesO6pwUn3yUfEXO7NbAIv4Jo" \
-            --konnect-addr "https://us.api.konghq.com" \
-            --verbose 3 || true
+            --verbose 3 || true           
           
-          
-          echo "Syncing configuration to Kong..."
+          echo "First Syncing configuration to Kong..."
+
+          deck gateway sync "${{ env.KONG_STATE_FILE }}" \
+            --kong-addr ${{ secrets.KONG_ADMIN_URL }} \
+            --headers "kong-admin-token:kpat_4uVdljok8Vkf3awjPJ0Zi3IkFesO6pwUn3yUfEXO7NbAIv4Jo"
+
+
+          echo "Second Syncing configuration to Kong..."
           
           deck gateway sync "${{ env.KONG_STATE_FILE }}" \
             --konnect-token "kpat_4uVdljok8Vkf3awjPJ0Zi3IkFesO6pwUn3yUfEXO7NbAIv4Jo" \
             --konnect-control-plane-name "serverless-api-gateway-demo" \
             --konnect-addr "https://us.api.konghq.com" \
             --select-tag "${{ env.SELECT_TAG }}"
+
+
+          
 
       - name: Upload generated Kong config as artifact
         uses: actions/upload-artifact@v4
