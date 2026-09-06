@@ -81,11 +81,7 @@ jobs:
           
           echo "First Syncing configuration to Kong..."
 
-          deck gateway sync "${{ env.KONG_STATE_FILE }}" \
-            --kong-addr ${{ secrets.KONG_ADMIN_URL }} \
-            --headers "kong-admin-token:kpat_4uVdljok8Vkf3awjPJ0Zi3IkFesO6pwUn3yUfEXO7NbAIv4Jo"
-
-
+          
           echo "Second Syncing configuration to Kong..."
           
           deck gateway sync "${{ env.KONG_STATE_FILE }}" \
@@ -93,6 +89,7 @@ jobs:
             --konnect-control-plane-name "serverless-api-gateway-demo" \
             --konnect-addr "https://us.api.konghq.com" \
             --select-tag "${{ env.SELECT_TAG }}"
+            --verbose 3 || true 
 
 
           
