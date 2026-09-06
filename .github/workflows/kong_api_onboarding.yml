@@ -1,7 +1,6 @@
 name: Kong API Onboarding with Deck
 
-on:
-  push:
+on: 
   workflow_dispatch:   # allow manual trigger
 
 env:
@@ -71,18 +70,11 @@ jobs:
       # ---------- Sync only on main (or manual) ----------
       - name: Sync configuration to Kong       
         run: |
-          echo "Pinging Kong..."
-          echo "=== Second Testing deck ping with verbose ==="
-          
-          deck gateway ping \
-            --konnect-token "kpat_4uVdljok8Vkf3awjPJ0Zi3IkFesO6pwUn3yUfEXO7NbAIv4Jo" \
-            --konnect-addr "https://us.api.konghq.com" \
-            --verbose 3 || true           
+       
           
           echo "First Syncing configuration to Kong..."
 
-          
-          echo "Second Syncing configuration to Kong..."
+          cat "${{ env.KONG_STATE_FILE }}"
           
           deck gateway sync "${{ env.KONG_STATE_FILE }}" \
             --konnect-token "kpat_4uVdljok8Vkf3awjPJ0Zi3IkFesO6pwUn3yUfEXO7NbAIv4Jo" \            
