@@ -79,8 +79,7 @@ jobs:
           deck gateway sync kong/generated-kong.yaml \
             --konnect-token "kpat_4uVdljok8Vkf3awjPJ0Zi3IkFesO6pwUn3yUfEXO7NbAIv4Jo" \            
             --konnect-addr "https://us.api.konghq.com/v2/control-planes/c3cb3787-4cd8-44ec-a67a-f172e5fde845" \
-            --select-tag "${{ env.SELECT_TAG }}" \
-            --verbose 3 || true 
+
 
 
           
