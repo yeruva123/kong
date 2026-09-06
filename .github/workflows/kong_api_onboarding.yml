@@ -66,6 +66,11 @@ jobs:
           DECK_HEADERS: "kong-admin-token:${{ secrets.KONG_ADMIN_TOKEN }}"
         run: |
           echo "Syncing configuration to Kong..."
+
+          deck gateway ping \
+          --konnect-token "kpat_4uVdljok8Vkf3awjPJ0Zi3IkFesO6pwUn3yUfEXO7NbAIv4Jo" \
+          --konnect-control-plane-name "serverless-api-gateway-demo" \
+          --konnect-addr "https://us.api.konghq.com"
           
           deck gateway sync "${{ env.KONG_STATE_FILE }}" \
           --konnect-token "kpat_4uVdljok8Vkf3awjPJ0Zi3IkFesO6pwUn3yUfEXO7NbAIv4Jo" \
