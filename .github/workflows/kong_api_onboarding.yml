@@ -70,7 +70,7 @@ jobs:
       # ---------- Sync only on main (or manual) ----------
       - name: Sync Kong Config to Konnect
         run: |
-          deck gateway sync -s kong/generated-kong.yaml \
+          deck gateway sync kong/generated-kong.yaml \
             --konnect-addr "https://us.api.konghq.com" \
             --konnect-control-plane-name "serverless-api-gateway-demo" \
             --konnect-token "kpat_4uVdljok8Vkf3awjPJ0Zi3IkFesO6pwUn3yUfEXO7NbAIv4Jo"
