@@ -20,9 +20,6 @@ jobs:
 
       - name: Setup decK
         uses: kong/setup-deck@v1
-        # Optionally pin a version:
-        # with:
-        #   deck-version: 1.40.0
 
       - name: Show decK version
         run: deck version
@@ -43,29 +40,6 @@ jobs:
           deck file validate "${{ env.KONG_STATE_FILE }}"
           # Optional: lint with custom rules if you have them
           # deck file lint "${{ env.KONG_STATE_FILE }}"
-
-      - name: Deep debug
-        run: |
-          echo "=== Deck version ==="
-          deck version
-      
-          echo "Run curl command"
-          echo "=== Testing with curl (same token) ==="
-          curl -s -o /tmp/curl_out.txt -w "HTTP Status: %{http_code}\n" \
-            -H "Authorization: Bearer kpat_4uVdljok8Vkf3awjPJ0Zi3IkFesO6pwUn3yUfEXO7NbAIv4Jo" \
-            https://us.api.konghq.com/v2/control-planes
-      
-          echo "Curl response body:"
-          cat /tmp/curl_out.txt
-          echo ""
-      
-          echo "First === Testing deck ping with verbose ==="
-          deck gateway ping \
-            --konnect-token "kpat_4uVdljok8Vkf3awjPJ0Zi3IkFesO6pwUn3yUfEXO7NbAIv4Jo" \
-            --konnect-addr "https://us.api.konghq.com" \
-            --verbose 3 || true
-            
-
 
       # ---------- Sync only on main (or manual) ----------
       - name: Sync Kong Config to Konnect
