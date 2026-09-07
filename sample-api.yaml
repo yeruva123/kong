@@ -1,14 +1,78 @@
-openapi: 3.0.1
+openapi: 3.0.0
 info:
-  title: Sample Pet API
+  title: Sample E-Commerce API
+  description: A simple API demonstrating two distinct resources.
   version: 1.0.0
 servers:
-  - url: https://httpbin.org
+  - url: http://localhost:8080/v1
+    description: Local development server
+
 paths:
-  /pets:
+  # Resource 1: Users
+  /users:
     get:
-      operationId: listPets
-      summary: List all pets
+      summary: List all users
+      operationId: listUsers
       responses:
-        "200":
-          description: A list of pets
+        '200':
+          description: A successful response containing an array of users.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+  # Resource 2: Products
+  /products:
+    get:
+      summary: List all products
+      operationId: listProducts
+      responses:
+        '200':
+          description: A successful response containing an array of products.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 101
+        name:
+          type: string
+          example: Jane Doe
+        email:
+          type: string
+          format: email
+          example: jane.doe@example.com
+
+    Product:
+      type: object
+      required:
+        - id
+        - title
+        - price
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 5001
+        title:
+          type: string
+          example: Wireless Mouse
+        price:
+          type: number
+          format: float
+          example: 29.99
